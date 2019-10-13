@@ -78,7 +78,7 @@ public class RegistrationActivity extends AppCompatActivity {
         String password = userPassword.getText().toString();
         String email = userEmail.getText().toString();
 
-        if(name.isEmpty() && password.isEmpty() && email.isEmpty()){
+        if(name.isEmpty() || password.isEmpty() || email.isEmpty()){
             Toast.makeText(this, "Please enter all the details", Toast.LENGTH_SHORT);
         }
         else{
