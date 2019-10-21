@@ -88,22 +88,7 @@ public class SecondActivity extends AppCompatActivity implements AdapterView.OnI
             }
         }
     };
-    private BroadcastReceiver mBroadcastReceiver3 = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            final String action = intent.getAction();
-            Log.d(Tag, "onReceive: ACTION FOUND");
 
-            if(action.equals(BluetoothDevice.ACTION_FOUND)){
-                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                mBTDevices.add(device);
-                Log.d(Tag, "onReceive:" + device.getName() + ": "+ device.getAddress());
-                mDeviceListAdaptor =  new DeviceListAdaptor(context, R.layout.device_adapter_view, mBTDevices);
-                lvNewDevices.setAdapter(mDeviceListAdaptor);
-
-            }
-        }
-    };
     private BroadcastReceiver mBroadcastReceiver4 = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -128,6 +113,26 @@ public class SecondActivity extends AppCompatActivity implements AdapterView.OnI
             }
         }
     };
+
+
+    private BroadcastReceiver mBroadcastReceiver3 = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final String action = intent.getAction();
+            Log.d(Tag, "onReceive: ACTION FOUND");
+
+            if(action.equals(BluetoothDevice.ACTION_FOUND)){
+                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                mBTDevices.add(device);
+                Log.d(Tag, "onReceive:" + device.getName() + ": "+ device.getAddress());
+                mDeviceListAdaptor =  new DeviceListAdaptor(context, R.layout.device_adapter_view, mBTDevices);
+                lvNewDevices.setAdapter(mDeviceListAdaptor);
+
+            }
+        }
+    };
+
+
     @Override
     protected void onDestroy() {
         Log.d(Tag, "onDestroyed Called");
@@ -148,8 +153,8 @@ public class SecondActivity extends AppCompatActivity implements AdapterView.OnI
         lvNewDevices = (ListView)findViewById(R.id.lvNewDevices);
         mBTDevices = new ArrayList<>();
 
-        IntentFilter filter = new IntentFilter((BluetoothDevice.ACTION_BOND_STATE_CHANGED));
-        registerReceiver(mBroadcastReceiver4, filter);
+//        IntentFilter filter = new IntentFilter((BluetoothDevice.ACTION_BOND_STATE_CHANGED));
+//        registerReceiver(mBroadcastReceiver4, filter);
 
         mBluetoothAdaptor = BluetoothAdapter.getDefaultAdapter();
 
@@ -212,17 +217,24 @@ public class SecondActivity extends AppCompatActivity implements AdapterView.OnI
             checkBTPermissions();
             mBluetoothAdaptor.startDiscovery();
             IntentFilter discoverDevicesIntent = new IntentFilter(BluetoothDevice.ACTION_FOUND);
-            registerReceiver(mBroadcastReceiver4, discoverDevicesIntent);
+            registerReceiver(mBroadcastReceiver3, discoverDevicesIntent);
 
         }
-        //if not discovering, start
-        if(mBluetoothAdaptor.isDiscovering()){
-            //Check BT Permissions in Manifest;
+        if(!mBluetoothAdaptor.isDiscovering())
+        {
             checkBTPermissions();
-            mBluetoothAdaptor.startDiscovery();
+            mBluetoothAdaptor.isDiscovering();
             IntentFilter discoverDevicesIntent = new IntentFilter(BluetoothDevice.ACTION_FOUND);
             registerReceiver(mBroadcastReceiver3, discoverDevicesIntent);
         }
+        //if not discovering, start
+//        if(mBluetoothAdaptor.isDiscovering()){
+//            //Check BT Permissions in Manifest;
+//            checkBTPermissions();
+//            mBluetoothAdaptor.startDiscovery();
+//            IntentFilter discoverDevicesIntent = new IntentFilter(BluetoothDevice.ACTION_FOUND);
+//            registerReceiver(mBroadcastReceiver4, discoverDevicesIntent);
+//        }
     }
     /*method requires for all devices funning API23+;
     android must programmatically check the permissions for bluetooth. Put proper permission from manifest
