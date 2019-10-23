@@ -227,14 +227,6 @@ public class SecondActivity extends AppCompatActivity implements AdapterView.OnI
             IntentFilter discoverDevicesIntent = new IntentFilter(BluetoothDevice.ACTION_FOUND);
             registerReceiver(mBroadcastReceiver3, discoverDevicesIntent);
         }
-        //if not discovering, start
-//        if(mBluetoothAdaptor.isDiscovering()){
-//            //Check BT Permissions in Manifest;
-//            checkBTPermissions();
-//            mBluetoothAdaptor.startDiscovery();
-//            IntentFilter discoverDevicesIntent = new IntentFilter(BluetoothDevice.ACTION_FOUND);
-//            registerReceiver(mBroadcastReceiver4, discoverDevicesIntent);
-//        }
     }
     /*method requires for all devices funning API23+;
     android must programmatically check the permissions for bluetooth. Put proper permission from manifest
